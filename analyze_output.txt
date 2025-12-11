@@ -1,0 +1,222 @@
+Analyzing kxs...                                                
+
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/core/services/k8s_provider.dart:3:8 • depend_on_referenced_packages
+   info • Sort directive sections alphabetically • lib/core/services/k8s_provider.dart:4:1 • directives_ordering
+   info • The imported package 'path' isn't a dependency of the importing package • lib/core/services/k8s_provider.dart:4:8 • depend_on_referenced_packages
+   info • Constructor declarations should be before non-constructor declarations • lib/core/services/k8s_provider.dart:14:3 • sort_constructors_first
+   info • Use 'late' for private members with a non-nullable type • lib/core/services/k8s_provider.dart:36:9 • use_late_for_private_fields_and_variables
+   info • The value of the argument is redundant because it matches the default value • lib/core/services/k8s_provider.dart:45:15 • avoid_redundant_argument_values
+   info • Use of an async 'dart:io' method • lib/core/services/k8s_provider.dart:52:15 • avoid_slow_async_io
+   info • Method invocation or property access on a 'dynamic' target • lib/core/services/k8s_provider.dart:62:32 • avoid_dynamic_calls
+   info • The imported package 'path' isn't a dependency of the importing package • lib/core/services/k8s_service.dart:3:8 • depend_on_referenced_packages
+   info • Use 'late' for private members with a non-nullable type • lib/core/services/k8s_service.dart:16:9 • use_late_for_private_fields_and_variables
+   info • Method invocation or property access on a 'dynamic' target • lib/core/services/k8s_service.dart:28:32 • avoid_dynamic_calls
+   info • The line length exceeds the 80-character limit • lib/core/services/k8s_service.dart:36:81 • lines_longer_than_80_chars
+   info • Use of an async 'dart:io' method • lib/core/services/k8s_service.dart:39:16 • avoid_slow_async_io
+   info • To-do comment doesn't follow the Flutter style • lib/core/services/k8s_service.dart:64:5 • flutter_style_todos
+   info • The line length exceeds the 80-character limit • lib/core/services/k8s_service.dart:66:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/core/services/k8s_service.dart:74:81 • lines_longer_than_80_chars
+   info • Missing a newline at the end of the file • lib/core/services/k8s_service.dart:76:2 • eol_at_end_of_file
+   info • Constructor declarations should be before non-constructor declarations • lib/core/services/openai_service.dart:10:3 • sort_constructors_first
+   info • The line length exceeds the 80-character limit • lib/core/services/openai_service.dart:19:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/core/services/openai_service.dart:27:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/core/services/openai_service.dart:40:81 • lines_longer_than_80_chars
+   info • Method invocation or property access on a 'dynamic' target • lib/core/services/openai_service.dart:63:16 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/services/openai_service.dart:63:16 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/services/openai_service.dart:63:16 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/services/openai_service.dart:63:16 • avoid_dynamic_calls
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/openai_service.dart:67:7 • avoid_catches_without_on_clauses
+   info • The value of the argument is redundant because it matches the default value • lib/core/theme/app_theme.dart:18:16 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value • lib/core/theme/app_theme.dart:19:20 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value • lib/core/theme/app_theme.dart:20:20 • avoid_redundant_argument_values
+  error • The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  • lib/core/theme/app_theme.dart:23:18 • argument_type_not_assignable
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/theme/app_theme.dart:24:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/theme/app_theme.dart:28:48 • deprecated_member_use
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/features/ai/controllers/ai_controller.dart:4:8 • depend_on_referenced_packages
+  error • Undefined class 'AiServiceRef' • lib/features/ai/controllers/ai_controller.dart:26:21 • undefined_class
+   info • The line length exceeds the 80-character limit • lib/features/ai/controllers/ai_controller.dart:36:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/ai/controllers/ai_controller.dart:37:81 • lines_longer_than_80_chars
+   info • Sort directive sections alphabetically • lib/features/ai/widgets/ai_analysis_panel.dart:3:1 • directives_ordering
+   info • Constructor declarations should be before non-constructor declarations • lib/features/ai/widgets/ai_analysis_panel.dart:15:9 • sort_constructors_first
+   info • Required named parameters should be before optional named parameters • lib/features/ai/widgets/ai_analysis_panel.dart:17:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/features/ai/widgets/ai_analysis_panel.dart:18:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/features/ai/widgets/ai_analysis_panel.dart:19:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/features/ai/widgets/ai_analysis_panel.dart:20:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/features/ai/widgets/ai_analysis_panel.dart:21:19 • always_put_required_named_parameters_first
+   info • The line length exceeds the 80-character limit • lib/features/ai/widgets/ai_analysis_panel.dart:43:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/ai/widgets/ai_analysis_panel.dart:67:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/ai/widgets/ai_analysis_panel.dart:75:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/ai/widgets/ai_analysis_panel.dart:87:81 • lines_longer_than_80_chars
+   info • 'Future'-returning calls in a non-'async' function • lib/features/ai/widgets/ai_analysis_panel.dart:88:5 • discarded_futures
+warning • The type argument(s) of the function 'showDialog' can't be inferred • lib/features/ai/widgets/ai_analysis_panel.dart:88:5 • inference_failure_on_function_invocation
+   info • The line length exceeds the 80-character limit • lib/features/ai/widgets/ai_analysis_panel.dart:104:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/ai/widgets/ai_analysis_panel.dart:108:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/cluster/views/cluster_selector_view.dart:22:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/cluster/views/cluster_selector_view.dart:33:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/cluster/views/cluster_selector_view.dart:38:81 • lines_longer_than_80_chars
+   info • 'Future'-returning calls in a non-'async' function • lib/features/cluster/views/cluster_selector_view.dart:41:59 • discarded_futures
+   info • The line length exceeds the 80-character limit • lib/features/cluster/views/cluster_selector_view.dart:49:81 • lines_longer_than_80_chars
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/features/dashboard/controllers/dashboard_controller.dart:1:8 • depend_on_referenced_packages
+   info • The method is used to change a property • lib/features/dashboard/controllers/dashboard_controller.dart:19:8 • use_setters_to_change_properties
+   info • Sort directive sections alphabetically • lib/features/dashboard/views/dashboard_view.dart:6:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/dashboard/views/dashboard_view.dart:7:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/dashboard/views/dashboard_view.dart:8:1 • directives_ordering
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:38:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:39:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:40:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:41:81 • lines_longer_than_80_chars
+   info • Use a 'ColoredBox' rather than a 'Container' with only a 'Color' • lib/features/dashboard/views/dashboard_view.dart:47:20 • use_colored_box
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:65:81 • lines_longer_than_80_chars
+   info • Invalid use of 'default' member in a switch • lib/features/dashboard/views/dashboard_view.dart:67:7 • no_default_cases
+warning • This default clause is covered by the previous cases • lib/features/dashboard/views/dashboard_view.dart:67:7 • unreachable_switch_default
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:68:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:72:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:77:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:80:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/dashboard/views/dashboard_view.dart:86:81 • lines_longer_than_80_chars
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/namespaces_controller.dart:2:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/namespaces_controller.dart:3:1 • directives_ordering
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/features/resources/controllers/namespaces_controller.dart:4:8 • depend_on_referenced_packages
+  error • Undefined class 'NamespacesRepositoryRef' • lib/features/resources/controllers/namespaces_controller.dart:9:43 • undefined_class
+   info • The method is used to change a property • lib/features/resources/controllers/namespaces_controller.dart:33:8 • use_setters_to_change_properties
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/nodes_controller.dart:2:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/nodes_controller.dart:3:1 • directives_ordering
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/features/resources/controllers/nodes_controller.dart:4:8 • depend_on_referenced_packages
+  error • Undefined class 'NodesRepositoryRef' • lib/features/resources/controllers/nodes_controller.dart:9:33 • undefined_class
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/pod_details_controller.dart:2:1 • directives_ordering
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/features/resources/controllers/pod_details_controller.dart:3:8 • depend_on_referenced_packages
+  error • Undefined class 'PodDetailsRepositoryRef' • lib/features/resources/controllers/pod_details_controller.dart:8:43 • undefined_class
+   info • The line length exceeds the 80-character limit • lib/features/resources/controllers/pod_details_controller.dart:28:81 • lines_longer_than_80_chars
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/pods_controller.dart:3:1 • directives_ordering
+   info • The imported package 'riverpod_annotation' isn't a dependency of the importing package • lib/features/resources/controllers/pods_controller.dart:4:8 • depend_on_referenced_packages
+   info • Sort directive sections alphabetically • lib/features/resources/controllers/pods_controller.dart:6:1 • directives_ordering
+  error • Undefined class 'PodsRepositoryRef' • lib/features/resources/controllers/pods_controller.dart:11:31 • undefined_class
+   info • Sort directive sections alphabetically • lib/features/resources/repositories/namespaces_repository.dart:2:1 • directives_ordering
+   info • Unnecessary use of an abstract class • lib/features/resources/repositories/namespaces_repository.dart:4:16 • one_member_abstracts
+   info • Constructor declarations should be before non-constructor declarations • lib/features/resources/repositories/namespaces_repository.dart:11:3 • sort_constructors_first
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:16:34 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:16:34 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:17:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:20:24 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:21:22 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:24:16 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/namespaces_repository.dart:25:18 • avoid_dynamic_calls
+   info • Sort directive sections alphabetically • lib/features/resources/repositories/nodes_repository.dart:2:1 • directives_ordering
+   info • Unnecessary use of an abstract class • lib/features/resources/repositories/nodes_repository.dart:4:16 • one_member_abstracts
+   info • Constructor declarations should be before non-constructor declarations • lib/features/resources/repositories/nodes_repository.dart:11:3 • sort_constructors_first
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:16:34 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:16:34 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:17:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:20:24 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:21:22 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:22:26 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:23:60 • avoid_dynamic_calls
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/nodes_repository.dart:23:81 • lines_longer_than_80_chars
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:24:23 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:27:16 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:29:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:29:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/nodes_repository.dart:30:28 • avoid_dynamic_calls
+   info • Constructor declarations should be before non-constructor declarations • lib/features/resources/repositories/pod_details_repository.dart:12:3 • sort_constructors_first
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pod_details_repository.dart:16:81 • lines_longer_than_80_chars
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pod_details_repository.dart:18:34 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pod_details_repository.dart:18:34 • avoid_dynamic_calls
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pod_details_repository.dart:18:81 • lines_longer_than_80_chars
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/features/resources/repositories/pod_details_repository.dart:23:7 • avoid_catches_without_on_clauses
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pod_details_repository.dart:24:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pod_details_repository.dart:31:81 • lines_longer_than_80_chars
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pod_details_repository.dart:34:26 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pod_details_repository.dart:34:26 • avoid_dynamic_calls
+   info • Unnecessary duplication of receiver • lib/features/resources/repositories/pod_details_repository.dart:49:9 • cascade_invocations
+   info • The variable 'item' should be final • lib/features/resources/repositories/pod_details_repository.dart:52:18 • prefer_final_in_for_each
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pod_details_repository.dart:56:81 • lines_longer_than_80_chars
+   info • Sort directive sections alphabetically • lib/features/resources/repositories/pods_repository.dart:2:1 • directives_ordering
+   info • Unnecessary use of an abstract class • lib/features/resources/repositories/pods_repository.dart:4:16 • one_member_abstracts
+   info • Constructor declarations should be before non-constructor declarations • lib/features/resources/repositories/pods_repository.dart:11:3 • sort_constructors_first
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pods_repository.dart:15:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pods_repository.dart:17:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/repositories/pods_repository.dart:19:81 • lines_longer_than_80_chars
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:22:26 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:22:26 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:23:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:28:24 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:29:22 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:32:16 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:33:21 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:34:18 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:35:28 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:36:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/features/resources/repositories/pods_repository.dart:36:19 • avoid_dynamic_calls
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/namespace_selector_view.dart:16:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/namespace_selector_view.dart:17:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/namespace_selector_view.dart:31:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/namespace_selector_view.dart:41:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:19:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:34:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:35:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:36:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:43:81 • lines_longer_than_80_chars
+   info • Local variables should be final • lib/features/resources/views/nodes_view.dart:51:5 • prefer_final_locals
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:51:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/nodes_view.dart:59:81 • lines_longer_than_80_chars
+   info • Sort directive sections alphabetically • lib/features/resources/views/pod_details_view.dart:4:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/resources/views/pod_details_view.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/resources/views/pod_details_view.dart:8:1 • directives_ordering
+   info • Constructor declarations should be before non-constructor declarations • lib/features/resources/views/pod_details_view.dart:14:9 • sort_constructors_first
+   info • Required named parameters should be before optional named parameters • lib/features/resources/views/pod_details_view.dart:14:50 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/features/resources/views/pod_details_view.dart:14:75 • always_put_required_named_parameters_first
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:14:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:20:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:65:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:67:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:69:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:76:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:96:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:105:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:113:81 • lines_longer_than_80_chars
+   info • 'Future'-returning calls in a non-'async' function • lib/features/resources/views/pod_details_view.dart:125:59 • discarded_futures
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:131:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:133:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:136:81 • lines_longer_than_80_chars
+   info • Use a 'ColoredBox' rather than a 'Container' with only a 'Color' • lib/features/resources/views/pod_details_view.dart:142:24 • use_colored_box
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:148:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:157:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pod_details_view.dart:170:81 • lines_longer_than_80_chars
+   info • 'Future'-returning calls in a non-'async' function • lib/features/resources/views/pod_details_view.dart:171:55 • discarded_futures
+   info • Sort directive sections alphabetically • lib/features/resources/views/pods_view.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/resources/views/pods_view.dart:6:1 • directives_ordering
+   info • Constructor declarations should be before non-constructor declarations • lib/features/resources/views/pods_view.dart:11:9 • sort_constructors_first
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:22:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:37:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:38:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:39:81 • lines_longer_than_80_chars
+   info • 'Future'-returning calls in a non-'async' function • lib/features/resources/views/pods_view.dart:41:25 • discarded_futures
+warning • The type argument(s) of the function 'showDialog' can't be inferred • lib/features/resources/views/pods_view.dart:41:25 • inference_failure_on_function_invocation
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:43:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:52:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:63:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/features/resources/views/pods_view.dart:72:81 • lines_longer_than_80_chars
+  error • Target of URI doesn't exist: 'package:flutter_localizations/flutter_localizations.dart' • lib/l10n/app_localizations.dart:5:8 • uri_does_not_exist
+  error • Const variables must be initialized with a constant value • lib/l10n/app_localizations.dart:90:9 • const_initialized_with_non_constant_value
+  error • The values in a const list literal must be constants • lib/l10n/app_localizations.dart:90:9 • non_constant_list_element
+  error • Undefined name 'GlobalMaterialLocalizations' • lib/l10n/app_localizations.dart:90:9 • undefined_identifier
+  error • The values in a const list literal must be constants • lib/l10n/app_localizations.dart:91:9 • non_constant_list_element
+  error • Undefined name 'GlobalCupertinoLocalizations' • lib/l10n/app_localizations.dart:91:9 • undefined_identifier
+  error • The values in a const list literal must be constants • lib/l10n/app_localizations.dart:92:9 • non_constant_list_element
+  error • Undefined name 'GlobalWidgetsLocalizations' • lib/l10n/app_localizations.dart:92:9 • undefined_identifier
+   info • Sort directive sections alphabetically • lib/main.dart:4:1 • directives_ordering
+   info • Local variables should be final • lib/main.dart:11:3 • prefer_final_locals
+   info • Unnecessary type annotation on a local variable • lib/main.dart:11:3 • omit_local_variable_types
+  error • Undefined name 'AppLocalizations' • lib/main.dart:35:31 • undefined_identifier
+  error • Undefined name 'AppLocalizations' • lib/main.dart:36:25 • undefined_identifier
+   info • Constructor declarations should be before non-constructor declarations • lib/shared/models/namespace_model.dart:5:3 • sort_constructors_first
+   info • Constructor declarations should be before non-constructor declarations • lib/shared/models/node_model.dart:7:3 • sort_constructors_first
+   info • Constructor declarations should be before non-constructor declarations • lib/shared/models/pod_model.dart:8:3 • sort_constructors_first
+   info • Constructor declarations should be before non-constructor declarations • lib/shared/widgets/glass_card.dart:9:9 • sort_constructors_first
+   info • Required named parameters should be before optional named parameters • lib/shared/widgets/glass_card.dart:11:19 • always_put_required_named_parameters_first
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/shared/widgets/glass_card.dart:24:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/shared/widgets/glass_card.dart:26:52 • deprecated_member_use
+   info • Dependencies not sorted alphabetically • pubspec.yaml:36:3 • sort_pub_dependencies
+   info • Dependencies not sorted alphabetically • pubspec.yaml:59:3 • sort_pub_dependencies
+   info • Sort directive sections alphabetically • test/widget_test.dart:11:1 • directives_ordering
+
