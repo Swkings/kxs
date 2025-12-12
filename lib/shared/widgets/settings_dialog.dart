@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 enum SettingsTab {
   general,
@@ -276,7 +278,14 @@ class _SettingsDialogState extends ConsumerState<SettingsDialog> {
                         _providerEnabled[provider] = value;
                       });
                     },
-                    activeColor: Colors.blue,
+                    thumbColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return Colors.blue;
+                        }
+                        return Colors.grey;
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -321,8 +330,56 @@ class _SettingsDialogState extends ConsumerState<SettingsDialog> {
                         const Spacer(),
                         if (provider == AIProvider.ollama)
                           TextButton(
-                            onPressed: () {
-                              // TODO: Fetch default list
+                            onPressed: () async {
+                              final baseUrl = _baseUrlControllers[provider]!.text;
+                              if (baseUrl.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('请先设置 BASE URL'),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
+                                return;
+                              }
+                              
+                              try {
+                                // Remove /v1 suffix if present for tags endpoint
+                                final apiUrl = baseUrl.replaceAll('/v1', '');
+                                final response = await http.get(
+                                  Uri.parse('$apiUrl/api/tags'),
+                                );
+                                
+                                if (response.statusCode == 200) {
+                                  final data = json.decode(response.body);
+                                  final models = data['models'] as List;
+                                  
+                                  setState(() {
+                                    _textModels[provider]!.clear();
+                                    for (final model in models) {
+                                      final modelName = model['name'] as String;
+                                      _textModels[provider]!.add(modelName);
+                                    }
+                                  });
+                                  
+                                  if (!mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('成功获取 ${models.length} 个模型'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else {
+                                  throw Exception('HTTP ${response.statusCode}');
+                                }
+                              } on Exception catch (e) {
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('获取模型失败: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
                             },
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

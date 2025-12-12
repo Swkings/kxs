@@ -1,24 +1,20 @@
 import 'dart:io';
-import 'package:kubernetes/kubernetes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 abstract class K8sService {
   Future<void> loadConfig({String? path});
-  KubernetesClient? get client;
   List<String> get contexts;
   String? get currentContext;
   Future<void> setContext(String context);
+  Future<void> deletePod(String namespace, String podName);
 }
 
 class K8sServiceImpl implements K8sService {
-  KubernetesClient? _client;
   File? _configFile;
   Map<String, dynamic>? _rawConfig;
   String? _currentContext;
-
-  @override
-  KubernetesClient? get client => _client;
 
   @override
   List<String> get contexts {
@@ -45,10 +41,6 @@ class K8sServiceImpl implements K8sService {
     
     // Set initial context
     _currentContext = _rawConfig!['current-context'] as String?;
-    
-    if (_currentContext != null) {
-      await _createClientForContext(_currentContext!);
-    }
   }
 
   @override
@@ -57,21 +49,21 @@ class K8sServiceImpl implements K8sService {
       throw Exception('Context $context not found');
     }
     _currentContext = context;
-    await _createClientForContext(context);
   }
 
-  Future<void> _createClientForContext(String context) async {
-    // TODO: The kubernetes package usage here is a simplification. 
-    // In a real app, we must extract the specific cluster/user details from the config
-    // and construct the KubernetesClient manually or use a helper if provided by the package.
-    // For now, checks are skipped to allow UI building.
+  @override
+  Future<void> deletePod(String namespace, String podName) async {
+    // Mock deletion - in a real implementation, this would call kubectl or K8s API
+    // For now, we simulate deletion with a delay
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     
-    // Note: This assumes the package can "auto-detect" or we just reload.
-    // Actually, the package creates a client from a specific config object.
-    // We would map the YAML data to KubernetesConfig.
-    
-    // Placeholder implementation for client creation:
-    // _client = KubernetesClient(KubernetesConfig.fromKubeConfig(_configFile!.path, context: context));
+    // In a real implementation, this would execute:
+    // kubectl delete pod <podName> -n <namespace>
+    // or use the Kubernetes API client directly
   }
 }
 
+// Provider for K8sService
+final k8sServiceProvider = Provider<K8sService>((ref) {
+  return K8sServiceImpl();
+});

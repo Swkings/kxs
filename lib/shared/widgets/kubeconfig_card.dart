@@ -288,5 +288,6 @@ class KubeconfigCard extends ConsumerWidget {
         onDelete!();
       }
     });
+    // The future is intentionally not awaited as we handle the result in .then()
   }
 }

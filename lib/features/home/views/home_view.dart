@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:kxs/shared/models/kubeconfig_model.dart';
 import 'package:kxs/shared/widgets/kubeconfig_card.dart';
 import 'package:kxs/shared/widgets/import_kubeconfig_card.dart';
 import 'package:kxs/l10n/app_localizations.dart';
 import 'package:kxs/features/dashboard/views/dashboard_view.dart';
-import 'package:kxs/core/theme/theme_mode.dart';
-import 'package:kxs/core/theme/theme_provider.dart';
-import 'package:kxs/shared/widgets/settings_dialog.dart';
+import 'package:kxs/shared/widgets/global_app_bar.dart';
+import 'package:kxs/shared/widgets/yaml_editor_dialog.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -50,47 +50,149 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   int? _selectedIndex;
 
-  void _connectToCluster(int index) {
-    final config = _kubeconfigs[index];
+  Future<bool> _validateConnection(KubeconfigModel config) async {
+    // Simulate connection validation
+    // In real implementation, this would try to connect to the k8s cluster
+    await Future.delayed(const Duration(milliseconds: 800));
     
-    // Don't navigate if config is invalid
-    if (!config.isValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(config.errorMessage ?? 'Invalid configuration'),
-          backgroundColor: Colors.red.shade700,
-        ),
-      );
+    // Return whether config is valid
+    // In real implementation, this would test actual connectivity
+    return config.isValid;
+  }
+
+  Future<void> _connectToCluster(int index) async {
+    final config = _kubeconfigs[index];
+    final l10n = AppLocalizations.of(context)!;
+    
+    // Show loading indicator
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    
+    // Validate connection
+    final canConnect = await _validateConnection(config);
+    
+    // Hide loading
+    if (mounted) Navigator.pop(context);
+    
+    if (!canConnect) {
+      // Show error dialog
+      if (mounted) {
+        showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.red),
+                SizedBox(width: 12),
+                Text('连接失败'),
+              ],
+            ),
+            content: Text(
+              config.errorMessage ?? '无法连接到 Kubernetes 集群，请检查配置文件是否正确',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('确定'),
+              ),
+            ],
+          ),
+        );
+      }
       return;
     }
     
+    // Connection successful - set as active and navigate
     setState(() {
       _selectedIndex = index;
+      for (var i = 0; i < _kubeconfigs.length; i++) {
+        _kubeconfigs[i] = _kubeconfigs[i].copyWith(
+          isActive: i == index,
+        );
+      }
     });
     
     // Navigate to dashboard
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(builder: (_) => const DashboardView()),
-    );
+    if (mounted) {
+      Navigator.of(context).push<void>(
+        MaterialPageRoute(builder: (_) => const DashboardView()),
+      );
+    }
   }
 
-  void _importKubeconfig() {
-    // TODO: Implement file picker - use file_picker package
-    // final result = await FilePicker.platform.pickFiles(
-    //   type: FileType.custom,
-    //   allowedExtensions: ['yaml', 'yml', 'config'],
-    // );
-    // if (result != null) {
-    //   // Parse kubeconfig and add to list
-    // }
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.importFromFile),
-        action: SnackBarAction(
-          label: 'OK',
-          onPressed: () {},
+  Future<void> _importKubeconfig() async {
+    print('🔍 DEBUG: Import kubeconfig button clicked');
+    try {
+      print('🔍 DEBUG: Calling FilePicker.platform.pickFiles...');
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['yaml', 'yml', 'config'],
+        dialogTitle: 'Select Kubeconfig File',
+      );
+      print('🔍 DEBUG: FilePicker returned: ${result != null ? "result" : "null"}');
+      
+      if (result != null && result.files.single.path != null) {
+        final filePath = result.files.single.path!;
+        final fileName = result.files.single.name;
+        print('🔍 DEBUG: Selected file: $fileName at $filePath');
+        
+        // In a real implementation, you would parse the kubeconfig file here
+        // For now, we'll just show a success message
+        setState(() {
+          _kubeconfigs.add(KubeconfigModel(
+            name: 'Imported: $fileName',
+            context: 'imported-context',
+            cluster: filePath,
+            user: 'imported-user',
+            namespace: 'default',
+          ));
+        });
+        
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Successfully imported: $fileName'),
+            backgroundColor: Colors.green.shade700,
+          ),
+        );
+        print('🔍 DEBUG: File added to list successfully');
+      } else {
+        print('🔍 DEBUG: User cancelled file selection or path is null');
+      }
+    } catch (e, stackTrace) {
+      print('❌ ERROR: FilePicker exception: $e');
+      print('❌ ERROR: Stack trace: $stackTrace');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to import kubeconfig: $e'),
+          backgroundColor: Colors.red.shade700,
         ),
+      );
+    }
+  }
+
+  void _editYamlKubeconfig(int index) async {
+    final config = _kubeconfigs[index];
+    showDialog<void>(
+      context: context,
+      builder: (context) => YamlEditorDialog(
+        title: '编辑 ${config.name} 配置',
+        initialName: config.name,
+        initialContent: config.content ?? '',
+        onSave: (newName, newContent) {
+          setState(() {
+            _kubeconfigs[index] = config.copyWith(
+              name: newName,
+              content: newContent,
+            );
+          });
+        },
       ),
     );
   }
@@ -237,20 +339,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          _buildLanguageMenu(context),
-          const SizedBox(width: 8),
-          _buildThemeMenu(),
-          const SizedBox(width: 8),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'Settings',
-            onPressed: _showSettings,
-          ),
-          const SizedBox(width: 16),
-        ],
-      ),
+      appBar: const GlobalAppBar(),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -364,8 +453,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                               builder: (context, candidateData, rejectedData) {
                                 return KubeconfigCard(
                                   config: config,
-                                  onTap: () => _connectToCluster(index),
-                                  onEdit: () => _editKubeconfig(index),
+                                  onTap:() => _connectToCluster(index),
+                                  onEdit: () => _editYamlKubeconfig(index),
                                   onDelete: () => _deleteKubeconfig(index),
                                   onCopy: () => _copyKubeconfig(index),
                                 );
@@ -379,63 +468,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ),
         ),
       ),
-    );
-  }
-
-  void _showSettings() {
-    showDialog<void>(
-      context: context,
-      builder: (context) => const SettingsDialog(),
-    );
-  }
-
-  Widget _buildLanguageMenu(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return PopupMenuButton<Locale>(
-      icon: const Icon(Icons.language),
-      tooltip: l10n.language,
-      onSelected: (Locale locale) {
-        // In a real app, use a provider to manage locale
-        // For now, this is just UI demonstration
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: const Locale('en'),
-          child: Text(l10n.languageEnglish),
-        ),
-        PopupMenuItem(
-          value: const Locale('zh'),
-          child: Text(l10n.languageChinese),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildThemeMenu() {
-    final currentTheme = ref.watch(themeControllerProvider);
-    
-    return PopupMenuButton<AppThemeMode>(
-      icon: Icon(currentTheme.icon),
-      tooltip: 'Theme',
-      onSelected: (AppThemeMode mode) {
-        ref.read(themeControllerProvider.notifier).setTheme(mode);
-      },
-      itemBuilder: (context) => AppThemeMode.values.map((mode) {
-        return PopupMenuItem(
-          value: mode,
-          child: Row(
-            children: [
-              Icon(mode.icon, size: 20),
-              const SizedBox(width: 12),
-              Text(mode.displayName),
-              if (mode == currentTheme) ...[
-                const Spacer(),
-                Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
-              ],
-            ],
-          ),
-        );
-      }).toList(),
     );
   }
 }

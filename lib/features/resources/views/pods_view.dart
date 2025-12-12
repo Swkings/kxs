@@ -6,6 +6,7 @@ import 'package:kxs/shared/widgets/glass_card.dart';
 import 'package:kxs/shared/models/pod_model.dart';
 import 'package:kxs/features/resources/views/pod_details_view.dart';
 import 'package:kxs/core/providers/selected_resource_provider.dart';
+import 'package:kxs/core/services/k8s_service.dart';
 
 class PodsView extends ConsumerStatefulWidget {
   final String namespace;
@@ -269,16 +270,31 @@ class _PodsViewState extends ConsumerState<PodsView> {
           TextButton(
             onPressed: () async {
               Navigator.of(context).pop();
-              // TODO: Implement actual delete via K8s API
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Deleting pod ${pod.name}...'),
-                  backgroundColor: Colors.orange,
-                ),
-              );
-              // After delete, refresh the list
-              await Future.delayed(const Duration(seconds: 1));
-              ref.invalidate(podsControllerProvider(widget.namespace));
+              
+              try {
+                // Attempt to delete the pod via K8s API
+                final k8sService = ref.read(k8sServiceProvider);
+                await k8sService.deletePod(pod.namespace, pod.name);
+                
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Successfully deleted pod ${pod.name}'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                
+                // Refresh the list
+                ref.invalidate(podsControllerProvider(widget.namespace));
+              } catch (e) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to delete pod: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Delete'),

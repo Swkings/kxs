@@ -4,6 +4,7 @@ class KubeconfigModel {
   final String cluster;
   final String? user;
   final String? namespace;
+  final String? content;  // Raw YAML content
   final bool isActive;
   final bool isValid;
   final String? errorMessage;
@@ -14,6 +15,7 @@ class KubeconfigModel {
     required this.cluster,
     this.user,
     this.namespace,
+    this.content,
     this.isActive = false,
     this.isValid = true,
     this.errorMessage,
@@ -25,6 +27,7 @@ class KubeconfigModel {
     String? cluster,
     String? user,
     String? namespace,
+    String? content,
     bool? isActive,
     bool? isValid,
     String? errorMessage,
@@ -35,6 +38,7 @@ class KubeconfigModel {
       cluster: cluster ?? this.cluster,
       user: user ?? this.user,
       namespace: namespace ?? this.namespace,
+      content: content ?? this.content,
       isActive: isActive ?? this.isActive,
       isValid: isValid ?? this.isValid,
       errorMessage: errorMessage ?? this.errorMessage,

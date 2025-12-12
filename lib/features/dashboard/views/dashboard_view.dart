@@ -5,12 +5,14 @@ import 'package:kxs/features/cluster/views/cluster_selector_view.dart';
 import 'package:kxs/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:kxs/features/resources/views/pods_view.dart';
 import 'package:kxs/features/resources/views/nodes_view.dart';
+import 'package:kxs/features/resources/views/services_view.dart';
 import 'package:kxs/features/resources/views/namespace_selector_view.dart';
 import 'package:kxs/features/resources/controllers/namespaces_controller.dart';
 import 'package:kxs/l10n/app_localizations.dart';
 import 'package:kxs/shared/widgets/command_palette_overlay.dart';
 import 'package:kxs/shared/widgets/command_palette_provider.dart';
 import 'package:kxs/shared/widgets/keyboard_help_overlay.dart';
+import 'package:kxs/shared/widgets/global_app_bar.dart';
 
 class DashboardView extends ConsumerStatefulWidget {
   const DashboardView({super.key});
@@ -37,14 +39,12 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               HardwareKeyboard.instance.isControlPressed) {
             Navigator.of(context).pop();
           }
-          // : (colon/semicolon with shift) to open command palette
-          else if (event.logicalKey == LogicalKeyboardKey.semicolon &&
-                   HardwareKeyboard.instance.isShiftPressed) {
+          // : (colon) to open command palette
+          else if (event.character == ':') {
             ref.read(commandPaletteVisibleProvider.notifier).show();
           }
-          // ? (question mark with shift on /) to show help
-          else if (event.logicalKey == LogicalKeyboardKey.slash &&
-                   HardwareKeyboard.instance.isShiftPressed) {
+          // ? (question mark) to show help
+          else if (event.character == '?') {
             setState(() => _showHelpOverlay = !_showHelpOverlay);
           }
           // Esc to close command palette or help
@@ -60,40 +60,49 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       child: Stack(
         children: [
           Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              elevation: 0,
-            ),
+            appBar: const GlobalAppBar(),  // Removed showBackButton parameter
             body: Row(
               children: [
-                // Sidebar
+                // Sidebar - fully scrollable to prevent overflow
                 Container(
                   width: 250,
                   color: Theme.of(context).cardTheme.color,
-                  child: Column(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                     children: [
-                      const SizedBox(height: 32),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: ClusterSelectorView(),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: NamespaceSelectorView(),
-                      ),
-                      const SizedBox(height: 32),
-                      // Navigation items wrapped in Expanded to handle overflow
-                      Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          children: [
-                            _buildNavItem(context, Icons.dashboard_rounded, AppLocalizations.of(context)!.navOverview, DashboardTab.overview, currentTab),
-                            _buildNavItem(context, Icons.storage_rounded, AppLocalizations.of(context)!.navPods, DashboardTab.pods, currentTab),
-                            _buildNavItem(context, Icons.dns_rounded, AppLocalizations.of(context)!.navServices, DashboardTab.services, currentTab),
-                            _buildNavItem(context, Icons.computer_rounded, AppLocalizations.of(context)!.navNodes, DashboardTab.nodes, currentTab),
-                          ],
+                      // Home button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: ElevatedButton.icon(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(Icons.home, size: 18),
+                          label: const Text('返回主页'),
+                          style: ElevatedButton.styleFrom(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.all(12),
+                          ),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      const SizedBox(height: 16),
+                      // Cluster selector
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: ClusterSelectorView(),
+                      ),
+                      const SizedBox(height: 8),
+                      // Namespace selector
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: NamespaceSelectorView(),
+                      ),
+                      const SizedBox(height: 24),
+                      // Navigation items
+                      _buildNavItem(context, Icons.dashboard_rounded, AppLocalizations.of(context)!.navOverview, DashboardTab.overview, currentTab),
+                      _buildNavItem(context, Icons.storage_rounded, AppLocalizations.of(context)!.navPods, DashboardTab.pods, currentTab),
+                      _buildNavItem(context, Icons.dns_rounded, AppLocalizations.of(context)!.navServices, DashboardTab.services, currentTab),
+                      _buildNavItem(context, Icons.computer_rounded, AppLocalizations.of(context)!.navNodes, DashboardTab.nodes, currentTab),
                     ],
                   ),
                 ),
@@ -130,7 +139,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       case DashboardTab.nodes:
         return const NodesView();
       case DashboardTab.services:
-        return Center(child: Text(AppLocalizations.of(context)!.dashboardServicesTodo));
+        final selectedNs = ref.watch(selectedNamespaceProvider);
+        return ServicesView(namespace: selectedNs);
       case DashboardTab.overview:
         return Center(child: Text(AppLocalizations.of(context)!.dashboardClusterOverview));
     }
