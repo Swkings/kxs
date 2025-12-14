@@ -9,54 +9,6 @@ part of 'pod_details_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(podDetailsRepository)
-const podDetailsRepositoryProvider = PodDetailsRepositoryProvider._();
-
-final class PodDetailsRepositoryProvider
-    extends
-        $FunctionalProvider<
-          PodDetailsRepository,
-          PodDetailsRepository,
-          PodDetailsRepository
-        >
-    with $Provider<PodDetailsRepository> {
-  const PodDetailsRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'podDetailsRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$podDetailsRepositoryHash();
-
-  @$internal
-  @override
-  $ProviderElement<PodDetailsRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  PodDetailsRepository create(Ref ref) {
-    return podDetailsRepository(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PodDetailsRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<PodDetailsRepository>(value),
-    );
-  }
-}
-
-String _$podDetailsRepositoryHash() =>
-    r'b45b45e306feca0de4eb9d8c2765f94d5b8a0076';
-
 @ProviderFor(PodYamlController)
 const podYamlControllerProvider = PodYamlControllerFamily._();
 
@@ -98,7 +50,7 @@ final class PodYamlControllerProvider
   }
 }
 
-String _$podYamlControllerHash() => r'cc6d321ca054b9615500a13900a9b8050d8d0e5b';
+String _$podYamlControllerHash() => r'a06c068da1f97b5ffabb51c3072c054a250b37af';
 
 final class PodYamlControllerFamily extends $Family
     with
@@ -189,7 +141,7 @@ final class PodLogsControllerProvider
   }
 }
 
-String _$podLogsControllerHash() => r'1af42a296500e4af937c905a760338931bb5dba5';
+String _$podLogsControllerHash() => r'aae89cc1fc7f83ad395dcfb9cce47f584da94195';
 
 final class PodLogsControllerFamily extends $Family
     with

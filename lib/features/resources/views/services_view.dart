@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kxs/features/resources/controllers/services_controller.dart';
-import 'package:kxs/shared/widgets/glass_card.dart';
+import 'package:kxs/shared/widgets/k9s_table.dart';
 import 'package:kxs/shared/models/service_model.dart';
-import 'package:kxs/core/providers/selected_resource_provider.dart';
 
 class ServicesView extends ConsumerStatefulWidget {
   final String namespace;
@@ -16,88 +15,29 @@ class ServicesView extends ConsumerStatefulWidget {
 }
 
 class _ServicesViewState extends ConsumerState<ServicesView> {
-  final ScrollController _scrollController = ScrollController();
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void _scrollToSelected(int selectedIndex, int itemCount) {
-    if (itemCount == 0) return;
-    
-    const itemHeight = 76.0;
-    final targetScroll = selectedIndex * itemHeight;
-    final viewportHeight = _scrollController.position.viewportDimension;
-    final currentScroll = _scrollController.offset;
-    
-    if (targetScroll < currentScroll) {
-      _scrollController.animateTo(
-        targetScroll,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-      );
-    } else if (targetScroll + itemHeight > currentScroll + viewportHeight) {
-      _scrollController.animateTo(
-        targetScroll - viewportHeight + itemHeight + 20,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-      );
-    }
-  }
+  int _highlightedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final servicesAsync = ref.watch(servicesControllerProvider(widget.namespace));
-    final selectedIndex = ref.watch(selectedResourceIndexProvider);
 
-    return KeyboardListener(
-      focusNode: _focusNode,
-      autofocus: true,
-      onKeyEvent: (KeyEvent event) {
-        if (event is KeyDownEvent) {
-          servicesAsync.whenData((services) {
-            if (services.isEmpty) return;
-            
-            // j or down arrow - move down
-            if (event.logicalKey == LogicalKeyboardKey.keyJ ||
-                event.logicalKey == LogicalKeyboardKey.arrowDown) {
-              ref.read(selectedResourceIndexProvider.notifier).moveDown(services.length - 1);
-              _scrollToSelected(ref.read(selectedResourceIndexProvider), services.length);
-            }
-            // k or up arrow - move up
-            else if (event.logicalKey == LogicalKeyboardKey.keyK ||
-                     event.logicalKey == LogicalKeyboardKey.arrowUp) {
-              ref.read(selectedResourceIndexProvider.notifier).moveUp();
-              _scrollToSelected(ref.read(selectedResourceIndexProvider), services.length);
-            }
-            // Ctrl+R - refresh
-            else if (event.logicalKey == LogicalKeyboardKey.keyR &&
-                     HardwareKeyboard.instance.isControlPressed) {
-              ref.invalidate(servicesControllerProvider(widget.namespace));
-            }
-          });
-        }
-      },
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(
-              'Services (${widget.namespace})',
-              style: Theme.of(context).textTheme.headlineSmall,
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            child: Container(
+              color: Colors.cyan,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              width: double.infinity,
+              child: Text(
+                'SERVICES (${widget.namespace})',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Courier',
+                ),
+              ),
             ),
           ),
           Expanded(
@@ -105,106 +45,95 @@ class _ServicesViewState extends ConsumerState<ServicesView> {
               data: (services) {
                 if (services.isEmpty) {
                   return const Center(
-                    child: Text('No services found', style: TextStyle(color: Colors.white54)),
+                    child: Text('No services found', style: TextStyle(color: Colors.white54, fontFamily: 'Courier')),
                   );
                 }
-                
-                return ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.all(16),
-                  itemCount: services.length,
-                  itemBuilder: (context, index) {
-                    final service = services[index];
-                    final isSelected = index == selectedIndex;
-                    
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: GlassCard(
-                        opacity: isSelected ? 0.8 : 0.5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: isSelected
-                                ? Border.all(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    width: 2,
-                                  )
-                                : null,
-                          ),
-                          child: ListTile(
-                            leading: _buildTypeIndicator(service),
-                            title: Text(
-                              service.name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: isSelected ? Theme.of(context).colorScheme.primary : Colors.white,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${service.type} | ${service.clusterIP}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            trailing: Text(
-                              _formatPorts(service.ports),
-                              style: const TextStyle(
-                                color: Colors.white54,
-                                fontSize: 12,
-                              ),
-                            ),
-                            onTap: () {
-                              ref.read(selectedResourceIndexProvider.notifier).select(index);
-                            },
-                          ),
-                        ),
-                      ),
-                    );
+
+                return RawKeyboardListener(
+                  focusNode: FocusNode(), 
+                  // We handle shortcuts here if we want to add specific actions like Edit/Delete
+                  // For now, K9sTable handles navigation.
+                  onKey: (event) {
+                    if (event is RawKeyDownEvent) {
+                      // Add specific service actions here
+                      if (event.logicalKey == LogicalKeyboardKey.keyR && event.isControlPressed) {
+                         ref.invalidate(servicesControllerProvider(widget.namespace));
+                      }
+                    }
                   },
+                  child: K9sTable(
+                    onHighlightChanged: (index) {
+                      setState(() {
+                        _highlightedIndex = index;
+                      });
+                    },
+                    columns: const [
+                      K9sTableColumn(title: 'NAME', flex: 3),
+                      K9sTableColumn(title: 'TYPE', flex: 2),
+                      K9sTableColumn(title: 'CLUSTER-IP', flex: 2),
+                      K9sTableColumn(title: 'PORTS', flex: 2),
+                      K9sTableColumn(title: 'AGE', flex: 1),
+                    ],
+                    rows: services.map((svc) {
+                      return K9sTableRow(
+                        cells: [
+                          svc.name,
+                          svc.type,
+                          svc.clusterIP,
+                          _formatPorts(svc.ports),
+                          _calculateAge(svc.creationTimestamp),
+                        ],
+                        onSelect: () {
+                          // Handle selection (details view?)
+                        },
+                      );
+                    }).toList(),
+                  ),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, stack) => Center(
                 child: Text(
                   'Error: $err',
-                  style: const TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red, fontFamily: 'Courier'),
                 ),
               ),
             ),
           ),
+          // Status bar
+          Container(
+            color: Colors.cyan,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              children: [
+                Text(
+                  'Service: ${servicesAsync.value?.isNotEmpty == true && _highlightedIndex < (servicesAsync.value?.length ?? 0) ? servicesAsync.value![_highlightedIndex].name : ""}',
+                  style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'Courier'),
+                ),
+                const Spacer(),
+                const Text(
+                  '<Ctrl+R> Refresh',
+                  style: TextStyle(color: Colors.black, fontFamily: 'Courier', fontSize: 12),
+                ),
+              ],
+            ),
+          ),
         ],
-      ),
     );
-  }
-
-  Widget _buildTypeIndicator(ServiceModel service) {
-    Color color = Colors.blue;
-    IconData icon = Icons.cloud;
-    
-    switch (service.type) {
-      case 'ClusterIP':
-        color = Colors.blue;
-        icon = Icons.cloud;
-        break;
-      case 'NodePort':
-        color = Colors.orange;
-        icon = Icons.router;
-        break;
-      case 'LoadBalancer':
-        color = Colors.green;
-        icon = Icons.balance;
-        break;
-      case 'ExternalName':
-        color = Colors.purple;
-        icon = Icons.link;
-        break;
-    }
-    
-    return Icon(icon, color: color, size: 24);
   }
 
   String _formatPorts(List<int> ports) {
     if (ports.isEmpty) return '-';
     if (ports.length == 1) return ports.first.toString();
-    if (ports.length <= 3) return ports.join(', ');
-    return '${ports.take(2).join(', ')}... (+${ports.length - 2})';
+    if (ports.length <= 2) return ports.join(',');
+    return '${ports[0]},...';
+  }
+
+  String _calculateAge(DateTime? creationTimestamp) {
+    if (creationTimestamp == null) return '?';
+    final duration = DateTime.now().difference(creationTimestamp);
+    if (duration.inDays > 0) return '${duration.inDays}d';
+    if (duration.inHours > 0) return '${duration.inHours}h';
+    return '${duration.inMinutes}m';
   }
 }

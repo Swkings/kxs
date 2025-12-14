@@ -21,7 +21,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navServices => 'Services';
 
   @override
+  String get navDeployments => 'Deployments';
+
+  @override
   String get navNodes => 'Nodes';
+
+  @override
+  String get navTerminal => 'Terminal';
+
+  @override
+  String get navBackToHome => 'Back to Home';
+
+  @override
+  String get navConfigMaps => 'ConfigMaps';
+
+  @override
+  String get navSecrets => 'Secrets';
+
+  @override
+  String get contextConfig => 'Context';
+
+  @override
+  String get namespace => 'Namespace';
 
   @override
   String get dashboardClusterOverview => 'Cluster Overview';
@@ -31,6 +52,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get podDetailsYaml => 'YAML';
+
+  @override
+  String get podViewLogs => 'View Logs';
+
+  @override
+  String get podViewShell => 'Shell';
+
+  @override
+  String get actionDelete => 'Delete';
+
+  @override
+  String get actionDescribe => 'Describe';
+
+  @override
+  String get actionEdit => 'Edit';
+
+  @override
+  String get confirmDelete => 'Confirm Delete';
+
+  @override
+  String deleteSuccess(Object name, Object resource) {
+    return 'Deleted $resource $name';
+  }
+
+  @override
+  String deleteError(Object error, Object name, Object resource) {
+    return 'Failed to delete $resource $name: $error';
+  }
 
   @override
   String get podDetailsLogs => 'Logs';
@@ -104,9 +153,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copyKubeconfig => 'Copy';
-
-  @override
-  String get confirmDelete => 'Confirm Delete';
 
   @override
   String get deleteConfirmMessage =>

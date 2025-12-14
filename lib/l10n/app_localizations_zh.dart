@@ -21,7 +21,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get navServices => '服务';
 
   @override
+  String get navDeployments => '部署';
+
+  @override
   String get navNodes => '节点';
+
+  @override
+  String get navTerminal => '终端';
+
+  @override
+  String get navBackToHome => '返回主页';
+
+  @override
+  String get navConfigMaps => '配置字典';
+
+  @override
+  String get navSecrets => '保密字典';
+
+  @override
+  String get contextConfig => '上下文';
+
+  @override
+  String get namespace => '命名空间';
 
   @override
   String get dashboardClusterOverview => '集群概览';
@@ -31,6 +52,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get podDetailsYaml => 'YAML';
+
+  @override
+  String get podViewLogs => '查看日志';
+
+  @override
+  String get podViewShell => '终端';
+
+  @override
+  String get actionDelete => '删除';
+
+  @override
+  String get actionDescribe => '描述';
+
+  @override
+  String get actionEdit => '编辑';
+
+  @override
+  String get confirmDelete => '确认删除';
+
+  @override
+  String deleteSuccess(Object name, Object resource) {
+    return '已删除 $resource $name';
+  }
+
+  @override
+  String deleteError(Object error, Object name, Object resource) {
+    return '删除 $resource $name 失败: $error';
+  }
 
   @override
   String get podDetailsLogs => '日志';
@@ -103,9 +152,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get copyKubeconfig => '复制';
-
-  @override
-  String get confirmDelete => '确认删除';
 
   @override
   String get deleteConfirmMessage => '确定要删除此 kubeconfig 吗？';

@@ -33,7 +33,7 @@ final class K8sControllerProvider
   K8sController create() => K8sController();
 }
 
-String _$k8sControllerHash() => r'c9a3e810dc18b103fbefa17de193136ed3bb7d91';
+String _$k8sControllerHash() => r'ca14928735fcb86b98ea3aaed1f6606e0dbe8aad';
 
 abstract class _$K8sController extends $AsyncNotifier<K8sState> {
   FutureOr<K8sState> build();

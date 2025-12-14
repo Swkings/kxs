@@ -122,11 +122,53 @@ abstract class AppLocalizations {
   /// **'Services'**
   String get navServices;
 
+  /// No description provided for @navDeployments.
+  ///
+  /// In en, this message translates to:
+  /// **'Deployments'**
+  String get navDeployments;
+
   /// No description provided for @navNodes.
   ///
   /// In en, this message translates to:
   /// **'Nodes'**
   String get navNodes;
+
+  /// No description provided for @navTerminal.
+  ///
+  /// In en, this message translates to:
+  /// **'Terminal'**
+  String get navTerminal;
+
+  /// No description provided for @navBackToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get navBackToHome;
+
+  /// No description provided for @navConfigMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'ConfigMaps'**
+  String get navConfigMaps;
+
+  /// No description provided for @navSecrets.
+  ///
+  /// In en, this message translates to:
+  /// **'Secrets'**
+  String get navSecrets;
+
+  /// No description provided for @contextConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'Context'**
+  String get contextConfig;
+
+  /// No description provided for @namespace.
+  ///
+  /// In en, this message translates to:
+  /// **'Namespace'**
+  String get namespace;
 
   /// No description provided for @dashboardClusterOverview.
   ///
@@ -145,6 +187,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'YAML'**
   String get podDetailsYaml;
+
+  /// No description provided for @podViewLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'View Logs'**
+  String get podViewLogs;
+
+  /// No description provided for @podViewShell.
+  ///
+  /// In en, this message translates to:
+  /// **'Shell'**
+  String get podViewShell;
+
+  /// No description provided for @actionDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get actionDelete;
+
+  /// No description provided for @actionDescribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe'**
+  String get actionDescribe;
+
+  /// No description provided for @actionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get actionEdit;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDelete;
+
+  /// No description provided for @deleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {resource} {name}'**
+  String deleteSuccess(Object name, Object resource);
+
+  /// No description provided for @deleteError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete {resource} {name}: {error}'**
+  String deleteError(Object error, Object name, Object resource);
 
   /// No description provided for @podDetailsLogs.
   ///
@@ -289,12 +379,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy'**
   String get copyKubeconfig;
-
-  /// No description provided for @confirmDelete.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Delete'**
-  String get confirmDelete;
 
   /// No description provided for @deleteConfirmMessage.
   ///

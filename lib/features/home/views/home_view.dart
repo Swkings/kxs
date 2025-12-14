@@ -8,6 +8,9 @@ import 'package:kxs/l10n/app_localizations.dart';
 import 'package:kxs/features/dashboard/views/dashboard_view.dart';
 import 'package:kxs/shared/widgets/global_app_bar.dart';
 import 'package:kxs/shared/widgets/yaml_editor_dialog.dart';
+import 'dart:io';
+
+import 'package:kxs/core/services/k8s_provider.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -25,6 +28,27 @@ class _HomeViewState extends ConsumerState<HomeView> {
       cluster: 'dev.k8s.local',
       user: 'dev-admin',
       namespace: 'default',
+      content: '''
+apiVersion: v1
+clusters:
+- cluster:
+    server: https://dev.k8s.local
+    certificate-authority-data: DATA+OMITTED
+  name: dev.k8s.local
+contexts:
+- context:
+    cluster: dev.k8s.local
+    user: dev-admin
+  name: dev-context
+current-context: dev-context
+kind: Config
+preferences: {}
+users:
+- name: dev-admin
+  user:
+    client-certificate-data: REDACTED
+    client-key-data: REDACTED
+''',
     ),
     const KubeconfigModel(
       name: 'Production Cluster',
@@ -32,12 +56,40 @@ class _HomeViewState extends ConsumerState<HomeView> {
       cluster: 'prod.k8s.local',
       user: 'prod-admin',
       namespace: 'kube-system',
+      content: '''
+apiVersion: v1
+clusters:
+- cluster:
+    server: https://prod.k8s.local
+  name: prod.k8s.local
+contexts:
+- context:
+    cluster: prod.k8s.local
+    user: prod-admin
+  name: prod-context
+current-context: prod-context
+kind: Config
+''',
     ),
     const KubeconfigModel(
       name: 'Staging Cluster',
       context: 'staging-context',
       cluster: 'staging.k8s.local',
       user: 'staging-admin',
+      content: '''
+apiVersion: v1
+clusters:
+- cluster:
+    server: https://staging.k8s.local
+  name: staging.k8s.local
+contexts:
+- context:
+    cluster: staging.k8s.local
+    user: staging-admin
+  name: staging-context
+current-context: staging-context
+kind: Config
+''',
     ),
     const KubeconfigModel(
       name: 'Invalid Cluster',
@@ -48,21 +100,108 @@ class _HomeViewState extends ConsumerState<HomeView> {
     ),
   ];
 
-  int? _selectedIndex;
-
-  Future<bool> _validateConnection(KubeconfigModel config) async {
-    // Simulate connection validation
-    // In real implementation, this would try to connect to the k8s cluster
-    await Future.delayed(const Duration(milliseconds: 800));
-    
-    // Return whether config is valid
-    // In real implementation, this would test actual connectivity
-    return config.isValid;
+  @override
+  void initState() {
+    super.initState();
+    _loadDefaultKubeconfigs();
   }
+
+  Future<void> _loadDefaultKubeconfigs() async {
+    try {
+      final home = Platform.environment['HOME'] ?? Platform.environment['UserProfile'];
+      if (home == null) return;
+      
+      final kubeDir = Directory('$home/.kube');
+      if (!await kubeDir.exists()) return;
+      
+      final entities = await kubeDir.list().toList();
+      for (var entity in entities) {
+        if (entity is File) {
+          final name = entity.uri.pathSegments.last;
+          // Load 'config' or common extensions
+          if (name == 'config' || name.endsWith('.yaml') || name.endsWith('.yml') || name.endsWith('.conf') || !name.contains('.')) {
+             try {
+               final content = await entity.readAsString();
+               // Basic check to see if it looks like yaml/kubeconfig
+               if (content.contains('apiVersion:') && content.contains('kind: Config')) {
+                 if (mounted) {
+                   setState(() {
+                      // Avoid duplicates
+                      if (!_kubeconfigs.any((k) => k.name == name)) {
+                        _kubeconfigs.add(KubeconfigModel(
+                          name: name,
+                          context: 'context-$name',
+                          cluster: 'cluster-from-$name',
+                          user: 'user',
+                          content: content,
+                          isValid: true,
+                        ));
+                      }
+                   });
+                 }
+               }
+             } catch (e) {
+               print('Failed to read potential kubeconfig $name: $e');
+             }
+          }
+        }
+      }
+    } catch (e) {
+      print('Error loading default kubeconfigs: $e');
+    }
+  }
+
+  void _createKubeconfig() {
+    final newConfig = const KubeconfigModel(
+      name: 'New Config',
+      context: 'new-context',
+      cluster: 'new-cluster',
+      content: '''apiVersion: v1
+clusters:
+- cluster:
+    server: https://kubernetes.default.svc
+    certificate-authority-data: 
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: kubernetes-admin
+  name: kubernetes-admin@kubernetes
+current-context: kubernetes-admin@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: kubernetes-admin
+  user:
+    client-certificate-data: 
+    client-key-data: 
+''',
+      isValid: true,
+    );
+    
+    // Open editor immediately
+    showDialog<void>(
+      context: context,
+      builder: (context) => YamlEditorDialog(
+        title: '新建配置',
+        initialName: newConfig.name,
+        initialContent: newConfig.content ?? '',
+        onSave: (newName, newContent) {
+          setState(() {
+            _kubeconfigs.add(newConfig.copyWith(
+              name: newName,
+              content: newContent,
+            ));
+          });
+        },
+      ),
+    );
+  }
+
+  int? _selectedIndex;
 
   Future<void> _connectToCluster(int index) async {
     final config = _kubeconfigs[index];
-    final l10n = AppLocalizations.of(context)!;
     
     // Show loading indicator
     showDialog<void>(
@@ -73,14 +212,38 @@ class _HomeViewState extends ConsumerState<HomeView> {
       ),
     );
     
-    // Validate connection
-    final canConnect = await _validateConnection(config);
-    
-    // Hide loading
-    if (mounted) Navigator.pop(context);
-    
-    if (!canConnect) {
-      // Show error dialog
+    try {
+      // Connect using the provider (writes file, checks with kubectl)
+      // For invalid mocks (isValid: false), maintain existing behavior?
+      // Since mocks might fail parsing, we check isValid first if we want to support the "Invalid Cluster" test case.
+      if (!config.isValid && config.errorMessage != null) {
+         throw Exception(config.errorMessage);
+      }
+      
+      await ref.read(k8sControllerProvider.notifier).connect(config);
+      
+      // Hide loading
+      if (mounted) Navigator.pop(context);
+
+      // Connection successful - set as active and navigate
+      setState(() {
+        _selectedIndex = index;
+        for (var i = 0; i < _kubeconfigs.length; i++) {
+          _kubeconfigs[i] = _kubeconfigs[i].copyWith(
+            isActive: i == index,
+          );
+        }
+      });
+      
+      if (mounted) {
+        Navigator.of(context).push<void>(
+          MaterialPageRoute(builder: (_) => const DashboardView()),
+        );
+      }
+      
+    } catch (e) {
+      if (mounted && Navigator.canPop(context)) Navigator.pop(context); // Hide loading
+      
       if (mounted) {
         showDialog<void>(
           context: context,
@@ -92,9 +255,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 Text('连接失败'),
               ],
             ),
-            content: Text(
-              config.errorMessage ?? '无法连接到 Kubernetes 集群，请检查配置文件是否正确',
-            ),
+            content: Text(e.toString().replaceAll('Exception: ', '')),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -104,24 +265,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ),
         );
       }
-      return;
-    }
-    
-    // Connection successful - set as active and navigate
-    setState(() {
-      _selectedIndex = index;
-      for (var i = 0; i < _kubeconfigs.length; i++) {
-        _kubeconfigs[i] = _kubeconfigs[i].copyWith(
-          isActive: i == index,
-        );
-      }
-    });
-    
-    // Navigate to dashboard
-    if (mounted) {
-      Navigator.of(context).push<void>(
-        MaterialPageRoute(builder: (_) => const DashboardView()),
-      );
     }
   }
 
@@ -130,8 +273,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
     try {
       print('🔍 DEBUG: Calling FilePicker.platform.pickFiles...');
       final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['yaml', 'yml', 'config'],
+        type: FileType.any, // Allow any file type (including no extension)
         dialogTitle: 'Select Kubeconfig File',
       );
       print('🔍 DEBUG: FilePicker returned: ${result != null ? "result" : "null"}');
@@ -193,94 +335,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
             );
           });
         },
-      ),
-    );
-  }
-
-  void _editKubeconfig(int index) {
-    final config = _kubeconfigs[index];
-    final l10n = AppLocalizations.of(context)!;
-    
-    final nameController = TextEditingController(text: config.name);
-    final contextController = TextEditingController(text: config.context);
-    final clusterController = TextEditingController(text: config.cluster);
-    final userController = TextEditingController(text: config.user ?? '');
-    final namespaceController = TextEditingController(text: config.namespace ?? 'default');
-    
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.editKubeconfig),
-        content: SizedBox(
-          width: 450,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: l10n.kubeconfigName,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: contextController,
-                  decoration: InputDecoration(
-                    labelText: l10n.kubeconfigContext,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: clusterController,
-                  decoration: InputDecoration(
-                    labelText: l10n.kubeconfigCluster,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: userController,
-                  decoration: InputDecoration(
-                    labelText: l10n.kubeconfigUser,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: namespaceController,
-                  decoration: InputDecoration(
-                    labelText: l10n.kubeconfigNamespace,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _kubeconfigs[index] = config.copyWith(
-                  name: nameController.text,
-                  context: contextController.text,
-                  cluster: clusterController.text,
-                  user: userController.text.isEmpty ? null : userController.text,
-                  namespace: namespaceController.text.isEmpty ? null : namespaceController.text,
-                );
-              });
-              Navigator.pop(context);
-            },
-            child: Text(l10n.save),
-          ),
-        ],
       ),
     );
   }
@@ -412,7 +466,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           // Last card is always the import card
                           if (index == _kubeconfigs.length) {
                             return ImportKubeconfigCard(
-                              onTap: _importKubeconfig,
+                              onImport: _importKubeconfig,
+                              onCreate: _createKubeconfig,
                             );
                           }
                           

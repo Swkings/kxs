@@ -9,54 +9,6 @@ part of 'namespaces_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(namespacesRepository)
-const namespacesRepositoryProvider = NamespacesRepositoryProvider._();
-
-final class NamespacesRepositoryProvider
-    extends
-        $FunctionalProvider<
-          NamespacesRepository,
-          NamespacesRepository,
-          NamespacesRepository
-        >
-    with $Provider<NamespacesRepository> {
-  const NamespacesRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'namespacesRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$namespacesRepositoryHash();
-
-  @$internal
-  @override
-  $ProviderElement<NamespacesRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  NamespacesRepository create(Ref ref) {
-    return namespacesRepository(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(NamespacesRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<NamespacesRepository>(value),
-    );
-  }
-}
-
-String _$namespacesRepositoryHash() =>
-    r'80ffd08fff24ce72aed2051011c0cc41e7c05ad3';
-
 @ProviderFor(NamespacesController)
 const namespacesControllerProvider = NamespacesControllerProvider._();
 
@@ -82,7 +34,7 @@ final class NamespacesControllerProvider
 }
 
 String _$namespacesControllerHash() =>
-    r'62032fb1ea846234adc42004a6433fe82f9edc9d';
+    r'96da2ffe6bbbb5a91a81c2c2e6f8bc3423ffe1b2';
 
 abstract class _$NamespacesController
     extends $AsyncNotifier<List<NamespaceModel>> {

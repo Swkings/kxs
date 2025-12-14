@@ -6,7 +6,9 @@ enum DashboardTab {
   overview,
   pods,
   services,
+  deployments,
   nodes,
+  terminal,
 }
 
 @riverpod

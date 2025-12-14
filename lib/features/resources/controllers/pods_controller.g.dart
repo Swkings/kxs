@@ -9,47 +9,6 @@ part of 'pods_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(podsRepository)
-const podsRepositoryProvider = PodsRepositoryProvider._();
-
-final class PodsRepositoryProvider
-    extends $FunctionalProvider<PodsRepository, PodsRepository, PodsRepository>
-    with $Provider<PodsRepository> {
-  const PodsRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'podsRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$podsRepositoryHash();
-
-  @$internal
-  @override
-  $ProviderElement<PodsRepository> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  PodsRepository create(Ref ref) {
-    return podsRepository(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PodsRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<PodsRepository>(value),
-    );
-  }
-}
-
-String _$podsRepositoryHash() => r'69fda15ab3daff4689926847e2a96fab47c0a57d';
-
 @ProviderFor(PodsController)
 const podsControllerProvider = PodsControllerFamily._();
 
@@ -91,7 +50,7 @@ final class PodsControllerProvider
   }
 }
 
-String _$podsControllerHash() => r'b9bd8f476eb6f61f584c21b4343f18e6255a0172';
+String _$podsControllerHash() => r'1b16912a208d2c2978a35b4fd6cf9d07e9dbe244';
 
 final class PodsControllerFamily extends $Family
     with

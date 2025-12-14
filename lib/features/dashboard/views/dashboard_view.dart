@@ -3,11 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kxs/features/cluster/views/cluster_selector_view.dart';
 import 'package:kxs/features/dashboard/controllers/dashboard_controller.dart';
+import 'package:kxs/features/dashboard/views/overview_view.dart';
 import 'package:kxs/features/resources/views/pods_view.dart';
 import 'package:kxs/features/resources/views/nodes_view.dart';
 import 'package:kxs/features/resources/views/services_view.dart';
+import 'package:kxs/features/resources/views/deployments_view.dart';
 import 'package:kxs/features/resources/views/namespace_selector_view.dart';
 import 'package:kxs/features/resources/controllers/namespaces_controller.dart';
+import 'package:kxs/features/terminal/views/terminal_view.dart';
 import 'package:kxs/l10n/app_localizations.dart';
 import 'package:kxs/shared/widgets/command_palette_overlay.dart';
 import 'package:kxs/shared/widgets/command_palette_provider.dart';
@@ -76,7 +79,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                         child: ElevatedButton.icon(
                           onPressed: () => Navigator.of(context).pop(),
                           icon: const Icon(Icons.home, size: 18),
-                          label: const Text('返回主页'),
+                          label: Text(AppLocalizations.of(context)!.navBackToHome),
                           style: ElevatedButton.styleFrom(
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.all(12),
@@ -102,7 +105,9 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                       _buildNavItem(context, Icons.dashboard_rounded, AppLocalizations.of(context)!.navOverview, DashboardTab.overview, currentTab),
                       _buildNavItem(context, Icons.storage_rounded, AppLocalizations.of(context)!.navPods, DashboardTab.pods, currentTab),
                       _buildNavItem(context, Icons.dns_rounded, AppLocalizations.of(context)!.navServices, DashboardTab.services, currentTab),
+                      _buildNavItem(context, Icons.layers_rounded, AppLocalizations.of(context)!.navDeployments, DashboardTab.deployments, currentTab),
                       _buildNavItem(context, Icons.computer_rounded, AppLocalizations.of(context)!.navNodes, DashboardTab.nodes, currentTab),
+                      _buildNavItem(context, Icons.terminal_rounded, AppLocalizations.of(context)!.navTerminal, DashboardTab.terminal, currentTab),
                     ],
                   ),
                 ),
@@ -141,8 +146,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       case DashboardTab.services:
         final selectedNs = ref.watch(selectedNamespaceProvider);
         return ServicesView(namespace: selectedNs);
+      case DashboardTab.deployments:
+        final selectedNs = ref.watch(selectedNamespaceProvider);
+        return DeploymentsView(namespace: selectedNs);
       case DashboardTab.overview:
-        return Center(child: Text(AppLocalizations.of(context)!.dashboardClusterOverview));
+        return const OverviewView();
+      case DashboardTab.terminal:
+        return const TerminalView();
     }
   }
 
