@@ -316,7 +316,8 @@ class ApiClusterService implements ClusterService {
         upToDateReplicas: status?.updatedReplicas ?? 0,
         availableReplicas: status?.availableReplicas ?? 0,
         age: age,
-      ).toList();
+      );
+    }).toList();
   }
 
   @override

@@ -133,6 +133,14 @@ class KubectlClusterService implements ClusterService {
   }
 
   @override
+  Future<void> deletePod(String namespace, String name) async {
+    final result = await _k8sController.runKubectl(['delete', 'pod', name, '-n', namespace]);
+    if (result.exitCode != 0) {
+      throw Exception('Failed to delete pod: ${result.stderr}');
+    }
+  }
+
+  @override
   Future<List<ServiceModel>> getServices(String namespace) async {
     final args = ['get', 'services', '-o', 'json'];
     if (namespace != 'all') {

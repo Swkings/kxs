@@ -42,8 +42,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               HardwareKeyboard.instance.isControlPressed) {
             Navigator.of(context).pop();
           }
-          // : (colon) to open command palette
-          else if (event.character == ':') {
+          // : (colon) or ：(Chinese colon) to open command palette
+          else if (event.character == ':' || event.character == '：') {
             ref.read(commandPaletteVisibleProvider.notifier).show();
           }
           // ? (question mark) to show help
